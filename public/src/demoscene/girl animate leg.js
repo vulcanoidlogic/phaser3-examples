@@ -21,28 +21,17 @@ var config = {
     parent: 'phaser-example',
     width: 640,
     height: 338,
+    backgroundColor: '#FCE6D7',
     scene: [ loaderSceneConfig, demoSceneConfig ]
 };
 
 var voice;
-var head;
-var eyes;
-var hairLeft;
-var hairRight;
 var headRotationStep = -0.00675;
 var hairRotationStep = -0.005;
-var armLeft;
-var armRight;
-var legLeft;
-var legRight;
-var legRight2;
-var redOvalLong;
-var redOvalArmLeftUpper;
-var redOvalArmLeftUpper;
-var redOvalArmRightUpper;
-var redOvalArmRightUpper;
-
-var girlGroup;
+var peppa1;
+var stickLegsHigh;
+var leftLeg;
+var rightLeg;
 
 var game = new Phaser.Game(config);
 
@@ -53,7 +42,7 @@ function bootLoader ()
 
 function bootCreate ()
 {
-    this.add.image(0, 0, 'loader').setOrigin(0);
+    // this.add.image(0, 0, 'loader').setOrigin(0);
 
     this.scene.launch('demo');
 }
@@ -63,52 +52,36 @@ function preload ()
     this.load.image('bg1', 'assets/demoscene/birdy-nam-nam-bg1.png');
 
     this.load.audio('mitekudasai', [ 'assets/audio/mitekudasai.wav']);
-    this.load.image('head', 'assets/demoscene/head3.png');
-    this.load.image('eyes', 'assets/demoscene/eyes.png');
-    this.load.image('shirt', 'assets/demoscene/shirt.png');
-    this.load.image('pants', 'assets/demoscene/pants.png');
-    this.load.image('hair-left', 'assets/demoscene/hair left.png');
-    this.load.image('hair-right', 'assets/demoscene/hair right.png');
-    this.load.image('arm-left', 'assets/demoscene/arm left2.png');
-    this.load.image('arm-right', 'assets/demoscene/arm right.png');
-    this.load.image('leg-left', 'assets/demoscene/leg left.png');
-    this.load.image('leg-right', 'assets/demoscene/leg right.png');
-    this.load.image('red-oval-long-h', 'assets/demoscene/red-oval-small-h.png');
-    this.load.image('red-oval-short-h', 'assets/demoscene/red-oval-horizontal.png');
-    this.load.image('red-oval-body', 'assets/demoscene/red-oval-vertical.png');
+    this.load.image('peppa-1', 'assets/demoscene/peppa1.png');
+    this.load.image('stick-legs-hi', 'assets/demoscene/stick-legs-hi.png');
+    this.load.image('cartoon-leg', 'assets/demoscene/cartoon-leg.png');
 }
 
 function create ()
 {
-    // this.add.image(0, 0, 'bg1').setOrigin(0);
 
     this.sound.pauseOnBlur = false;
     voice = this.sound.add('mitekudasai');
     voice.play();
 
-    var redOvalScale = 0.75;
-    var redOvalArmScale = 0.35
-    redOvalBody = (this.add.sprite(210, 100, 'red-oval-body')).setScale(redOvalScale,redOvalScale).setOrigin(0.5,0).setAngle(0);
-    redOvalArmLeftUpper = (this.add.sprite(150, 154, 'red-oval-long-h')).setScale(redOvalArmScale,redOvalArmScale).setOrigin(0.5,0).setAngle(-45);
-    redOvalArmLeftLower = (this.add.sprite(120, 218, 'red-oval-long-h')).setScale(redOvalArmScale,redOvalArmScale).setOrigin(0.5,0).setAngle(-90);
-    redOvalArmRightUpper = (this.add.sprite(270, 154, 'red-oval-long-h')).setScale(redOvalArmScale,redOvalArmScale).setOrigin(0.5,0).setAngle(45);
-    redOvalArmRightLower = (this.add.sprite(300, 218, 'red-oval-long-h')).setScale(redOvalArmScale,redOvalArmScale).setOrigin(0.5,0).setAngle(90);
-    // var redOvalShort;
-    // var redOvalBody;
+    var peppaScale = 0.15;
+    var legScale = 0.25;
         
-    legRight = (this.add.sprite(211, 158, 'leg-right')).setScale(0.22, 0.22).setOrigin(0.5,0).setAngle(0);
-    legRight2 = (this.add.sprite(211, 184, 'leg-right')).setScale(0.22, 0.22).setOrigin(0.5,0.8).setAngle(0);
+    rightLeg = (this.add.sprite(205, 220, 'cartoon-leg')).setScale(legScale, legScale).setOrigin(0.5,0.8).setAngle(-90);
+    leftLeg = (this.add.sprite(255, 220, 'cartoon-leg')).setScale(legScale, legScale).setOrigin(0.5,0.8).setAngle(0);
+    peppa1 = (this.add.sprite(210, 184, 'peppa-1')).setScale(peppaScale, peppaScale).setOrigin(0.5,0.8).setAngle(0);
 
 }
 
 function update (time, delta)
 {
     // if (voice.isPlaying) {
-        if (legRight.rotation > 0.3 || legRight.rotation < -0.3) {
+            console.log('time, rightLeg.rotation',time, rightLeg.rotation);
+        if (rightLeg.rotation > -1.57 || rightLeg.rotation < -2.57) {
             headRotationStep = -1*headRotationStep;
             hairRotationStep = -1*hairRotationStep;
         }
-        Phaser.Actions.Rotate([legRight], headRotationStep);
-        Phaser.Actions.Rotate([legRight2], -1*headRotationStep);
+        Phaser.Actions.Rotate([rightLeg], headRotationStep);
+        // Phaser.Actions.Rotate([legRight2], -1*headRotationStep);
     // }
 }

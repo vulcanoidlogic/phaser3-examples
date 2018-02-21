@@ -53,7 +53,7 @@ function bootLoader ()
 
 function bootCreate ()
 {
-    this.add.image(0, 0, 'loader').setOrigin(0);
+    // this.add.image(0, 0, 'loader').setOrigin(0);
 
     this.scene.launch('demo');
 }
