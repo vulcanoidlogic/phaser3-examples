@@ -15,10 +15,11 @@ var demoSceneConfig = {
 };
 
 var config = {
+    title: 'Peppa Pig Experiment',
     type: Phaser.AUTO,
     parent: 'phaser-example',
     width: 640,
-    height: 338,
+    height: 480,
     backgroundColor: '#FCE6D7',
     scene: [ loaderSceneConfig, demoSceneConfig ]
 };
@@ -35,6 +36,8 @@ var leftArm;
 var rightArm;
 var peppaGroup;
 var mouth;
+var leftEye;
+var rightEye;
 
 var game = new Phaser.Game(config);
 
@@ -53,8 +56,10 @@ function bootCreate ()
 function preload ()
 {
     this.load.audio('peppa-pig', [ 'assets/audio/Peppa-Pig.mp3']);
+    this.load.audio('peppa-pig-greg', [ 'assets/audio/Peppa-Pig-Greg.mp3']);
     this.load.image('peppa-1', 'assets/demoscene/peppa1.png');
     this.load.spritesheet('mouth-default', 'assets/demoscene/mouthDefault.png', { frameWidth: 200, frameHeight: 200 });
+    this.load.spritesheet('eyes-default', 'assets/demoscene/eyes2.png', { frameWidth: 200, frameHeight: 200 });
     this.load.image('cartoon-arm', 'assets/demoscene/cartoon-arm.png');
     this.load.image('cartoon-leg', 'assets/demoscene/cartoon-leg.png');
 }
@@ -78,20 +83,41 @@ function create ()
     var peppaScale = 0.15;
     peppa1 = (this.add.sprite(110, 204, 'peppa-1')).setScale(peppaScale, peppaScale).setOrigin(0.5,0.8).setAngle(0);
 
-    mouth = this.add.sprite(100, 100, 'mouth-default');
+    var mouthScale = 0.7;
+    mouth = (this.add.sprite(125, 110, 'mouth-default')).setScale(mouthScale).setAngle(-15);
+
+    var eyesScale = 0.2;
+    leftEye = (this.add.sprite(125, 42, 'eyes-default')).setScale(eyesScale).setAngle(-15);
+    rightEye = (this.add.sprite(105, 55, 'eyes-default')).setScale(eyesScale).setAngle(-15);
     
     peppaGroup = this.add.group();
-    peppaGroup.addMultiple([leftArm, rightArm, leftLeg, rightLeg, peppa1, mouth], true);
-    console.log('peppaGroup=', peppaGroup);
+    peppaGroup.addMultiple([leftArm, rightArm, leftLeg, rightLeg, peppa1, mouth, leftEye, rightEye], true);
+
+    this.anims.create({
+        key: 'mouth-rest',
+        frames: this.anims.generateFrameNumbers('mouth-default', { start: 8, end: 8 }),
+        frameRate: 1,
+        repeat: 0
+    });
 
     this.anims.create({
         key: 'mouth-1',
-        frames: this.anims.generateFrameNumbers('mouth-default', { start: 1, end: 12 }),
+        frames: this.anims.generateFrameNumbers('mouth-default', { start: 0, end: 30 }),
         frameRate: 5,
-        repeat: 20
+        repeat: -1
     });
 
     mouth.anims.play('mouth-1');
+
+    this.anims.create({
+        key: 'eyes-blink',
+        frames: this.anims.generateFrameNumbers('eyes-default', { start: 0, end: 1 }),
+        frameRate: 1,
+        repeat: -1
+    });
+
+    leftEye.anims.play('eyes-blink');
+    rightEye.anims.play('eyes-blink');
 
 }
 
@@ -119,6 +145,9 @@ function update (time, delta)
         leftLeg.setAngle(legAtRestAngle);
         rightLeg.setAngle(legAtRestAngle);
         Phaser.Actions.IncX(peppaGroup.getChildren(), -1*peppa1.getBounds().x);
+        mouth.anims.play('mouth-rest');
         mouth.anims.stop('mouth-1');
+        leftEye.anims.stop('eyes-blink');
+        rightEye.anims.stop('eyes-blink');
     }
 }
